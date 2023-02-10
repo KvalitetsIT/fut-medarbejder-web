@@ -1,17 +1,17 @@
 import { t } from 'i18next';
 import { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { UserContext } from '../../feature/User/logic/FetchUser';
+import { UserContext } from '../../feature/authentication/logic/FetchUser';
 
 
 import { RootState } from '../../redux/store';
 
-type LayoutProps = {
+type OldLayoutProps = {
     children: JSX.Element
 }
 
 
-const Layout = (props: LayoutProps) => {
+const OldLayout = (props: OldLayoutProps) => {
     const loggedInAs = useContext(UserContext);
     return (
         <>
@@ -26,4 +26,4 @@ const Layout = (props: LayoutProps) => {
     )
 }
 
-export default Layout;
+export default OldLayout;

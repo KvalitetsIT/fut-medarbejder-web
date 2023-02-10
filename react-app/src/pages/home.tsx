@@ -5,7 +5,6 @@ export const HomePage = () => {
     return (
         <>
         <TodoList></TodoList>
-        <ValidationSchemaExample></ValidationSchemaExample>
         </>
     )
 }
