@@ -1,6 +1,5 @@
 import { Box, Container, CssBaseline, Toolbar, Typography, useTheme } from '@mui/material';
 import React from 'react';
-import { theme } from '../../config/theme';
 import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
@@ -11,6 +10,7 @@ import AnnouncementIcon from '@mui/icons-material/Announcement';
 import { useKeycloak } from '@react-keycloak/web';
 import { Stack } from '@mui/system';
 import { t } from 'i18next';
+import GroupIcon from '@mui/icons-material/Group';
 type LayoutProps = {
   children: JSX.Element
 }
@@ -23,9 +23,9 @@ export default function Layout(props: LayoutProps) {
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const keycloak = useKeycloak()
+  //const keycloak = useKeycloak()
 
-  const disableSidebar = !keycloak.initialized || !keycloak.keycloak.authenticated
+  const disableSidebar = false //!keycloak.initialized || !keycloak.keycloak.authenticated
 
   return (
 
@@ -46,21 +46,15 @@ export default function Layout(props: LayoutProps) {
           logo={<Title color={theme.palette.primary.contrastText} />}>
           <SidebarSection hideDivider title={"Public"}>
             <SidebarItem title={t("Dashboard")} icon={<SwapVertIcon />} href={"/"} />
-            {/* <SidebarItem title='Login' icon={<LoginIcon />} href={"/login"} />
-            <SidebarItem title='Register' icon={<LogoutIcon />} href={"/register"} /> */}
-            <SidebarItem title={t('Subscribe')} icon={<NotificationsActiveIcon />} href={"/subscribe"} />
+            <SidebarItem title={t('Patients')} icon={<GroupIcon />} href={"/patients"} />
           </SidebarSection>
           <SidebarSection hideDivider>
-            <SidebarItem title={t("Services")} icon={<MiscellaneousServicesIcon />} href={"/services"} />
-            <SidebarItem title={t("Groups")} icon={<WorkspacesIcon />} href={"/groups"} />
-            <SidebarItem title={t("Announcements")} icon={<AnnouncementIcon />} href={"/announcements"} />
           </SidebarSection>
         </Sidebar>
         <Container maxWidth={false} sx={{ backgroundColor: theme.palette.background.default, flexGrow: 1, p: 2, width: { md: `calc(100% - ${sidebarWidth}px)` } }}>
           <Toolbar />
           {props.children}
         </Container>
-        n
       </Box>
     </>
   )
@@ -85,7 +79,7 @@ function Title(props: { color?: string }) {
           fontSize: 40
 
         }}
-      >LOGO</Typography>
+      >FUT-DEMO</Typography>
     </Stack>
 
   )
