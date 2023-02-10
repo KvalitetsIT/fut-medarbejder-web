@@ -2,7 +2,7 @@ import { Ability, AbilityBuilder } from "@casl/ability";
 import Todo from "../../../models/todo";
 import { Role, User } from "../../../models/User";
 
-export enum Operation {
+export enum Operations {
     CREATE = "create",
     READ = "read",
     UPDATE = "update",
@@ -11,23 +11,16 @@ export enum Operation {
     MANAGE = "manage"
 }
 
-export enum Asset {
-    TODO = "todo",
-    USER = "user",
-    PRIVATE_FEATURE = "private_feature",
-    PUBLIC_FEATURE = "public_feature"
-}
-
 const defineAbility = (user: User) => {
     const { can, cannot, build } = new AbilityBuilder(Ability);
 
     user.roles.forEach(role => {
         switch (role) {
             case Role.ADMIN:
-                can(Operation.READ, Asset.TODO, { id: 5 })
+                can(Operations.READ, Todo, { id: 5 })
                 break;
             case Role.ORG_SUPER:
-                can(Operation.MANAGE, [Asset.USER, Asset.TODO])
+                can(Operations.MANAGE, User)
                 break;
         }
     })

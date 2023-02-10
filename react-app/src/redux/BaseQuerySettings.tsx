@@ -1,5 +1,5 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/dist/query";
-import keycloak from "../feature/authentication/Keycloak";
+import keycloak from "../feature/Keycloak/Keycloak";
 
 export default function fetchDefaultBaseQuery() {
     return fetchBaseQuery({
