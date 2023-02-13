@@ -1,50 +1,54 @@
-import { KeycloakInstance } from "keycloak-js";
+import Keycloak  from "keycloak-js";
 import { createContext } from "react";
-import { useDispatch } from "react-redux";
 import { Role, User } from "../../../models/User";
 import UserFactory from "./UserFactory";
 
-export async function GetJWTToken(keycloak: KeycloakInstance): Promise<JWTToken | undefined> {
+
+export async function GetJWTToken(keycloak: Keycloak): Promise<JWTToken | undefined> {
     console.log("authenticated", keycloak.tokenParsed)
     return keycloak.tokenParsed as JWTToken;
 }
+
+
+const createUserContext = () => {
+    const userFactory = new UserFactory()
+    return createContext<User | undefined>(userFactory.createGuestUser());
+}
+
+export const UserContext = createUserContext()
 
 export function LoginBasedOnToken(token: JWTToken): User {
     let userFactory = new UserFactory();
     let user = userFactory.createGuestUser();
 
     try {
-        console.log(token)
         const name = token.name;
-        const role = getRoleFromStringArray(token.roles!);
+        const roles: Role[] = token.roles as unknown as Role[];
 
-        user = userFactory.createUser(name!, role)
-
+        user = userFactory.createUser(name!, roles)
     } catch (error) {
         console.log("Error getting user info from auth token", error)
     }
     return user;
 }
 
-export const UserContext = createContext<User | undefined>(undefined);
-
-function getRoleFromStringArray(roles: string[] | undefined): Role {
-
+export function getRoleFromStringArray(roles: string[] | undefined): Role[] {
+    let result: Role[] = []
     if (roles?.findIndex(x => x === "admin") !== -1)
-        return Role.ADMIN
+        result?.push(Role.ADMIN)
     if (roles?.findIndex(x => x === "org-admin") !== -1)
-        return Role.ORG_ADMIN
+        result?.push(Role.ORG_ADMIN)
     if (roles?.findIndex(x => x === "org-super") !== -1)
-        return Role.ORG_SUPER
+        result?.push(Role.ORG_SUPER)
     if (roles?.findIndex(x => x === "org-read-only") !== -1)
-        return Role.ORG_READ_ONLY
+        result?.push(Role.ORG_READ_ONLY)
     if (roles?.findIndex(x => x === "read-only") !== -1)
-        return Role.READ_ONLY
-
-    return Role.UNKNOWN
+        result?.push(Role.READ_ONLY)
+        
+    return result
 }
 
-class JWTToken {
+export class JWTToken {
     exp?: string
     iat?: string
     auth_time?: number

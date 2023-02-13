@@ -1,5 +1,6 @@
 import { Box, Container, CssBaseline, Toolbar, Typography, useTheme } from '@mui/material';
 import React from 'react';
+import { theme } from '../../config/theme';
 import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
@@ -10,7 +11,6 @@ import AnnouncementIcon from '@mui/icons-material/Announcement';
 import { useKeycloak } from '@react-keycloak/web';
 import { Stack } from '@mui/system';
 import { t } from 'i18next';
-import GroupIcon from '@mui/icons-material/Group';
 type LayoutProps = {
   children: JSX.Element
 }
@@ -23,7 +23,7 @@ export default function Layout(props: LayoutProps) {
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  //const keycloak = useKeycloak()
+  // const keycloak = useKeycloak()
 
   const disableSidebar = false //!keycloak.initialized || !keycloak.keycloak.authenticated
 
@@ -46,15 +46,15 @@ export default function Layout(props: LayoutProps) {
           logo={<Title color={theme.palette.primary.contrastText} />}>
           <SidebarSection hideDivider title={"Public"}>
             <SidebarItem title={t("Dashboard")} icon={<SwapVertIcon />} href={"/"} />
-            <SidebarItem title={t('Patients')} icon={<GroupIcon />} href={"/patients"} />
+            <SidebarItem title={t('Patients')} icon={<NotificationsActiveIcon />} href={"/patients"} />
           </SidebarSection>
-          <SidebarSection hideDivider>
-          </SidebarSection>
+          
         </Sidebar>
         <Container maxWidth={false} sx={{ backgroundColor: theme.palette.background.default, flexGrow: 1, p: 2, width: { md: `calc(100% - ${sidebarWidth}px)` } }}>
           <Toolbar />
           {props.children}
         </Container>
+        n
       </Box>
     </>
   )
@@ -65,7 +65,9 @@ function Title(props: { color?: string }) {
   return (
 
     <Stack direction={"row"}>
-      <Typography
+
+    <Typography
+        
         noWrap
         component="a"
         sx={{
@@ -81,7 +83,7 @@ function Title(props: { color?: string }) {
         }}
       >FUT-DEMO</Typography>
     </Stack>
-
+  
   )
 }
 
