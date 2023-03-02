@@ -2,7 +2,7 @@
 
 echo "${GITHUB_REPOSITORY}"
 echo "${DOCKER_SERVICE}"
-if [ "${GITHUB_REPOSITORY}" != "kvalitetsit/kittyact" ] && [ "${DOCKER_SERVICE}" = "kvalitetsit/kittyact" ]; then
+if [ "${GITHUB_REPOSITORY}" != "kvalitetsit/fut-medarbejder-web" ] && [ "${DOCKER_SERVICE}" = "kvalitetsit/fut-medarbejder-web" ]; then
   echo "Please run setup.sh REPOSITORY_NAME"
   exit 1
 fi

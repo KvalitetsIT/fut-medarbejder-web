@@ -1,11 +1,5 @@
-# kitTyAct
-KIT TYpescript reAct : Template project for frontend projects in typescript/react. 
-
-# Use KitTyAct as template
-1. Press the green button in github saying "Use template"
-1. Clone the new project to your own machine
-1. Run the file setup.sh with the name of your dockerhub-repo, so if your repo is kvalitetsit/medcom-sdn-ui, it should be executed like `sh setup.sh medcom-sdn-ui` 
-1. You are ready to go!
+# fut-medarbejder-web
+This is an example WEB application for the FUT platform.
 
 # Requirements
 The project is installed using `npx create-react-app my-template-app --template typescript` 
