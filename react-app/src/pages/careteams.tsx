@@ -1,19 +1,9 @@
 import { Divider, List, ListItem, ListItemText, Typography } from "@mui/material"
-import Box from '@mui/material/Box';
-import { useState } from "react";
 import { useGetCareTeamsQuery } from "../feature/api/careteams";
 
-enum Mode {
-    NORMAL = "normal",
-    ADD = "add",
-    DELETE = "delete",
-    UPDATE = "update",
-}
 
 export function CareTeams() {
     const { data: careteams, isLoading } = useGetCareTeamsQuery(undefined);
-    console.log(careteams);
-    const [mode, setMode] = useState(Mode.NORMAL);
 
     return (
         <>
