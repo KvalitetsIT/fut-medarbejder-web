@@ -4,7 +4,7 @@ import fetchDefaultBaseQuery from './BaseQuerySettings'
 export const futApiSlice = createApi({
     reducerPath: 'fut_api',
     tagTypes: [
-        'patients', 'patient', 'careteams'
+        'patients', 'patient', 'careteams', 'careteam'
     ],
     refetchOnMountOrArgChange: true,
     baseQuery: fetchDefaultBaseQuery(),

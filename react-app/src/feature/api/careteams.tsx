@@ -12,13 +12,27 @@ export const careTeamSlice = futApiSlice.injectEndpoints({
       query: () => ({
         url: `careteams`,
         method: "GET",
-        responseHandler: (res) => handleResponse({ response: res, toastWithResult: false, toastErrorText: "CareTeams could not be fetched" }),
+        responseHandler: (res) => handleResponse({
+          response: res, toastWithResult: false,
+          toastErrorText: "CareTeams could not be fetched"
+        }),
       }),
       providesTags: ["careteams"]
+    }),
+    getCareTeam: builder.query<CareTeam, number>({
+      query: (id) => ({
+        url: `careteams/${id}`,
+        method: "GET",
+        responseHandler: (res) => handleResponse({
+          response: res, toastWithResult: false,
+          toastErrorText: `CareTeam  ${id} could not be fetched`
+        }),
+      }),
+      providesTags: ["careteam"]
     })
   })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetCareTeamsQuery } = careTeamSlice
+export const { useGetCareTeamsQuery, useGetCareTeamQuery } = careTeamSlice

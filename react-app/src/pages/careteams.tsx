@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Divider, List, ListItem, ListItemText, Typography } from "@mui/material"
 import { useGetCareTeamsQuery } from "../feature/api/careteams";
 
@@ -15,7 +16,7 @@ export function CareTeams() {
                 {   
                     isLoading ? <p>Loading...</p> : 
                     careteams && careteams.map((careteam) =>
-                        <ListItem sx={{
+                        <ListItem component={Link} to={`/careteams/${careteam.uuid}`} sx={{
                             padding: 1,
                             border: 2,
                             borderColor: "#EEEEEE",

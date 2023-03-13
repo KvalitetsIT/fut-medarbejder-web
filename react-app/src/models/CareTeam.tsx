@@ -6,6 +6,6 @@ export default interface CareTeam {
         code: string;
         display: string;
     }];
-    managingOrganization: string;
+    managingOrganization: [string];
 }
   

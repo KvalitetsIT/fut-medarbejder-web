@@ -15,6 +15,7 @@ import { HomePage } from "../pages/home";
 import { Patients } from "../pages/patients";
 import { CareTeams } from "../pages/careteams";
 import store from "../redux/store";
+import { CareTeam } from "../pages/careteam";
 
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
                             <Route path="/" element={<HomePage />} />
                             <Route path="/patients" element={<Patients />} />
                             <Route path="/careteams" element={<CareTeams />} />
+                            <Route path="/careteams/:id" element={<CareTeam id="135884" />} />
                             <Route path="*" element={<Typography>Page not found</Typography>} />
                             
                             </Routes>
