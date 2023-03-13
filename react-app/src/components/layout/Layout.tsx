@@ -47,6 +47,7 @@ export default function Layout(props: LayoutProps) {
           <SidebarSection hideDivider title={"Public"}>
             <SidebarItem title={t("Dashboard")} icon={<SwapVertIcon />} href={"/"} />
             <SidebarItem title={t('Patients')} icon={<NotificationsActiveIcon />} href={"/patients"} />
+            <SidebarItem title={t('CareTeams')} icon={<NotificationsActiveIcon />} href={"/careteams"} />
           </SidebarSection>
           
         </Sidebar>

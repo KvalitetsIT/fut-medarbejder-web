@@ -1,8 +1,7 @@
 import { Divider, List, ListItem, ListItemText, Typography } from "@mui/material"
 import Box from '@mui/material/Box';
-import { theme } from "../config/theme";
-import { useState } from "react"
-import { useGetPatientsQuery } from "../feature/api/patients"
+import { useState } from "react";
+import { useGetCareTeamsQuery } from "../feature/api/careteams";
 
 enum Mode {
     NORMAL = "normal",
@@ -11,21 +10,21 @@ enum Mode {
     UPDATE = "update",
 }
 
-export function Patients() {
-    const { data: patients, isLoading: fetchingPatients } = useGetPatientsQuery(undefined);
-    console.log(patients);
+export function CareTeams() {
+    const { data: careteams, isLoading } = useGetCareTeamsQuery(undefined);
+    console.log(careteams);
     const [mode, setMode] = useState(Mode.NORMAL);
 
     return (
         <>
-            <Typography variant="h4">Patients</Typography>
+            <Typography variant="h4">CareTeams</Typography>
 
             <Divider />
 
             <List>
                 {   
-                    fetchingPatients ? <p>Loading...</p> : 
-                    patients && patients.map((patient) =>
+                    isLoading ? <p>Loading...</p> : 
+                    careteams && careteams.map((careteam) =>
                         <ListItem sx={{
                             padding: 1,
                             border: 2,
@@ -35,14 +34,14 @@ export function Patients() {
                             backgroundColor: "#d5e6f7"
                         }}>
                             <ListItemText
-                                primary={patient.firstName + ' ' + patient.lastName}
-                                secondary={patient.cpr}
+                                primary={careteam.name}
+                                secondary={careteam.reasonCode[0].code + " " + careteam.reasonCode[0].display}
                             />
                         
                         </ListItem>)
                 }
             </List>
-
+            
         </>
     )
 }
