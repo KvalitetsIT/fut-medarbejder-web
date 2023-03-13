@@ -1,4 +1,4 @@
-import { futApiSlice } from '../../redux/fut-api-slice';
+import { futApiSlice } from '../../redux/futApiSlice';
 import CareTeam from '../../models/CareTeam';
 import handleResponse from '../../redux/handleResponse';
 

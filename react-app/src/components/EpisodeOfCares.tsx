@@ -1,14 +1,16 @@
 import { Divider, List, ListItem, ListItemText, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useGetEpisodeOfCaresQuery } from "../feature/api/episodeOfCares";
-import EpisodeOfCare from "../models/EpisodeOfCare"
 
 interface EpisodesOfCaresProps {
     careTeamId: string
 }
 
 export function EpisodesOfCares(props: EpisodesOfCaresProps) {
-    const careTeamId = parseInt(props.careTeamId);
+    const { id } = useParams(); 
+    // TODO: Fix hardkodet id senere, fejl på BFF
+    const careTeamId = 135884;  //parseInt(id || "0");
+    console.log("careTeamId", careTeamId);
     const { data: episodeOfCares, isLoading } = useGetEpisodeOfCaresQuery(careTeamId);
     console.log(episodeOfCares);
 
@@ -22,7 +24,7 @@ export function EpisodesOfCares(props: EpisodesOfCaresProps) {
                 <List>
                     {   
                         episodeOfCares && episodeOfCares.map((eoc) =>
-                            <ListItem sx={{
+                            <ListItem component={Link} to={`/episodeofcare/${eoc.uuid}`} sx={{
                                 padding: 1,
                                 border: 2,
                                 borderColor: "#EEEEEE",

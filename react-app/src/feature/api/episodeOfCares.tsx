@@ -1,5 +1,5 @@
 import EpisodeOfCare from '../../models/EpisodeOfCare';
-import { futApiSlice } from '../../redux/fut-api-slice';
+import { futApiSlice } from '../../redux/futApiSlice';
 import handleResponse from '../../redux/handleResponse';
 
 // Define a service using a base URL and expected endpoints
@@ -15,11 +15,22 @@ export const episodeOfCareSlice = futApiSlice.injectEndpoints({
           toastErrorText: "Episodes of Cares could not be fetched"
         }),
       }),
-      providesTags: ["episodes-of-cares"]
+      providesTags: ["episode-of-cares"]
+    }),
+    getEpisodeOfCare: builder.query<EpisodeOfCare, number>({
+      query: (episodeOfCareId) => ({
+        url: `episodeofcares/${episodeOfCareId}`,
+        method: "GET",
+        responseHandler: (res) => handleResponse({
+          response: res, toastWithResult: false,
+          toastErrorText: `Episodes of Care ${episodeOfCareId} could not be fetched`
+        }),
+      }),
+      providesTags: ["episode-of-care"]
     })
   })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetEpisodeOfCaresQuery } = episodeOfCareSlice;
+export const { useGetEpisodeOfCaresQuery, useGetEpisodeOfCareQuery } = episodeOfCareSlice;

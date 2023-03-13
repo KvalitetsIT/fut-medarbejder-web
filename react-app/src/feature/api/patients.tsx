@@ -1,6 +1,6 @@
 import Patient from '../../models/Patient';
 import HandleQuery from '../../redux/EndpointQueryHandler';
-import { futApiSlice } from '../../redux/fut-api-slice';
+import { futApiSlice } from '../../redux/futApiSlice';
 //import handleResponse from '../redux/handleResponse';
 import handleResponse from '../../redux/handleResponse';
 

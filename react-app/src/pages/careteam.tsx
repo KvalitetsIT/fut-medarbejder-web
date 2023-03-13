@@ -1,14 +1,13 @@
-import { Box, Divider, List, ListItem, ListItemText, Typography } from "@mui/material"
+import { Box, Divider, Typography } from "@mui/material"
+import { useParams } from "react-router-dom";
 import { EpisodesOfCares } from "../components/EpisodeOfCares";
 import { useGetCareTeamQuery } from "../feature/api/careteams";
 
-interface CareTeamProps {
-    id: string
-}
 
-export function CareTeam(props : CareTeamProps) {
-    const id : number = parseInt(props.id);
-    const { data: careteam, isLoading } = useGetCareTeamQuery(id);
+export function CareTeam() {
+    const { id } = useParams(); 
+    const careTeamId : number = parseInt(id ? id : "");
+    const { data: careteam, isLoading } = useGetCareTeamQuery(careTeamId);
 
     console.log(careteam);
 
