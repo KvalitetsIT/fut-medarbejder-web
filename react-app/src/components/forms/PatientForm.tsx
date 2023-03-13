@@ -7,8 +7,9 @@ import 'dayjs/locale/ru';
 import 'dayjs/locale/de';
 import 'dayjs/locale/ar-sa';
 import 'dayjs/locale/da';
-import { Patient } from "../../feature/api/patients";
 import { ValidatedTextField } from "../input/validatedTextField";
+
+import Patient from "../../models/Patient";
 
 
 
@@ -34,9 +35,9 @@ export function PatientForm(props: PatientFormProps) {
     })
 
     const defaultValues: Patient = {
-        
         firstName: "",
         lastName: "",
+        cpr: ""
     }
 
     if (props.isLoading) return (<></>)

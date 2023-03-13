@@ -1,15 +1,9 @@
 
+import Patient from '../../models/Patient';
 import HandleQuery from '../../redux/EndpointQueryHandler';
 import { futApiSlice } from '../../redux/fut-api-slice';
 //import handleResponse from '../redux/handleResponse';
 import handleResponse from '../../redux/handleResponse';
-
-
-export interface Patient {
-  uuid?: string
-  firstName: string
-  lastName: string
-}
 
 
 // Define a service using a base URL and expected endpoints
@@ -26,14 +20,13 @@ export const patientSlice = futApiSlice.injectEndpoints({
       providesTags: ["patients"]
     }),
     getPatients: builder.query<Patient[], undefined>({
-      query: (id) => ({
-        //url: `${baseurl}/todos?page=${pack.pagination.page}&limit=${pack.pagination.pagesize}`,
+      query: () => ({
         url: `patients`,
         method: "GET",
         responseHandler: (res) => handleResponse({ response: res, toastWithResult: false, toastErrorText: "Patients could not be fetched" }),
       }),
       providesTags: ["patients"]
-    }),
+    })/*,
     postPatient: builder.mutation<Patient, Patient>({
       query: (patient) => ({
         //url: `${baseurl}/todos?page=${pack.pagination.page}&limit=${pack.pagination.pagesize}`,
@@ -62,10 +55,10 @@ export const patientSlice = futApiSlice.injectEndpoints({
         responseHandler: (res) => handleResponse({ response: res, toastWithResult: false, toastErrorText: "Patient could not be updated" }),
       }),
       invalidatesTags: ["patients"]
-    }),
+    }),*/
   })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetPatientQuery, usePutPatientMutation, useGetPatientsQuery, usePostPatientMutation } = patientSlice
+export const { useGetPatientQuery, useGetPatientsQuery } = patientSlice

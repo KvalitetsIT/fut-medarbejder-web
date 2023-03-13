@@ -5,8 +5,6 @@ export const futApiSlice = createApi({
     reducerPath: 'fut_api',
     tagTypes: [
         'patients', 'patient',
-
-        
     ],
     refetchOnMountOrArgChange: true,
     baseQuery: fetchDefaultBaseQuery(),
