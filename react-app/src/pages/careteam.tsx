@@ -1,10 +1,10 @@
 import { Box, Divider, List, ListItem, ListItemText, Typography } from "@mui/material"
+import { EpisodesOfCares } from "../components/EpisodeOfCares";
 import { useGetCareTeamQuery } from "../feature/api/careteams";
 
 interface CareTeamProps {
     id: string
 }
-
 
 export function CareTeam(props : CareTeamProps) {
     const id : number = parseInt(props.id);
@@ -14,7 +14,7 @@ export function CareTeam(props : CareTeamProps) {
 
     return (
         <>
-            <Typography variant="h4">CareTeam</Typography>
+            <Typography variant="h4">{isLoading ? <p>Loading...</p> : careteam?.name}</Typography>
 
             <Divider />
 
@@ -25,7 +25,7 @@ export function CareTeam(props : CareTeamProps) {
                 paddingLeft: "0.5em"
             }}>
             {
-                isLoading ? <p>Loading...</p> :
+                isLoading ? <></> :
                 <>
                     <p>Id: {careteam?.uuid}</p>
                     <p>Name: {careteam?.name}</p>
@@ -39,6 +39,8 @@ export function CareTeam(props : CareTeamProps) {
                             )}
                         </ol>            
                     </p>
+                            
+                    <EpisodesOfCares careTeamId={careteam ? careteam.uuid : ""} />
                 </>
             }
             </Box>

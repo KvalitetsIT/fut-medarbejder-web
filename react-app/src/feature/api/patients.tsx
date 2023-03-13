@@ -1,10 +1,8 @@
-
 import Patient from '../../models/Patient';
 import HandleQuery from '../../redux/EndpointQueryHandler';
 import { futApiSlice } from '../../redux/fut-api-slice';
 //import handleResponse from '../redux/handleResponse';
 import handleResponse from '../../redux/handleResponse';
-
 
 // Define a service using a base URL and expected endpoints
 export const patientSlice = futApiSlice.injectEndpoints({

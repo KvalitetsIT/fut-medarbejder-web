@@ -1,5 +1,5 @@
 export default interface CareTeam {
-    uuid?: string;
+    uuid: string;
     name: string;
     status: string;
     reasonCode: [{

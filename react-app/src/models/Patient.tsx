@@ -1,5 +1,5 @@
 export default interface Patient {
-    uuid?: string;
+    uuid: string;
     firstName: string;
     lastName: string;
     cpr: string;

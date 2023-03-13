@@ -11,28 +11,28 @@ export function CareTeams() {
             <Typography variant="h4">CareTeams</Typography>
 
             <Divider />
-
-            <List>
-                {   
-                    isLoading ? <p>Loading...</p> : 
-                    careteams && careteams.map((careteam) =>
-                        <ListItem component={Link} to={`/careteams/${careteam.uuid}`} sx={{
-                            padding: 1,
-                            border: 2,
-                            borderColor: "#EEEEEE",
-                            textAlign: "left",
-                            display: "list-item",
-                            backgroundColor: "#d5e6f7"
-                        }}>
-                            <ListItemText
-                                primary={careteam.name}
-                                secondary={careteam.reasonCode[0].code + " " + careteam.reasonCode[0].display}
-                            />
-                        
-                        </ListItem>)
-                }
-            </List>
-            
+            {
+                isLoading ? <p>Loading...</p> : 
+                <List>
+                    {   
+                        careteams && careteams.map((careteam) =>
+                            <ListItem component={Link} to={`/careteams/${careteam.uuid}`} sx={{
+                                padding: 1,
+                                border: 2,
+                                borderColor: "#EEEEEE",
+                                textAlign: "left",
+                                display: "list-item",
+                                backgroundColor: "#d5e6f7"
+                            }}>
+                                <ListItemText
+                                    primary={careteam.name}
+                                    secondary={careteam.reasonCode[0].code + " " + careteam.reasonCode[0].display}
+                                />
+                            
+                            </ListItem>)
+                    }
+                </List>
+            }
         </>
     )
 }
