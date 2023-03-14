@@ -8,8 +8,8 @@ interface EpisodesOfCaresProps {
 
 export function EpisodesOfCares(props: EpisodesOfCaresProps) {
     const { id } = useParams(); 
-    // TODO: Fix hardkodet id senere, fejl på BFF
-    const careTeamId = 135884;  //parseInt(id || "0");
+    
+    const careTeamId = parseInt(id || "0");
     console.log("careTeamId", careTeamId);
     const { data: episodeOfCares, isLoading } = useGetEpisodeOfCaresQuery(careTeamId);
     console.log(episodeOfCares);

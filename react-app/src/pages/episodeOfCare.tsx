@@ -1,10 +1,11 @@
 import { Box, Divider, Typography } from "@mui/material"
+import { useParams } from "react-router-dom";
 import { useGetEpisodeOfCareQuery } from "../feature/api/episodeOfCares";
 
 export function EpisodeOfCare() {
-    // TODO: Fix hardkodet id, få den fra params i stedet
-    const id : number = 118337;
-    const { data: episodeOfCare, isLoading } = useGetEpisodeOfCareQuery(id);
+    const { id } = useParams();
+    const eocId = parseInt(id || "0");
+    const { data: episodeOfCare, isLoading } = useGetEpisodeOfCareQuery(eocId);
 
     console.log(episodeOfCare);
 

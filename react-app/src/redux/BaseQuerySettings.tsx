@@ -9,13 +9,6 @@ export default function fetchDefaultBaseQuery() {
         mode: "cors",
         baseUrl: baseurl,
         prepareHeaders: (headers, api) => {
-            /*
-            const token = undefined // keycloak.token
-            //const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c" // <-- fake token
-            if (token) {
-                headers.set('Authorization', `Bearer ${token}`);
-            }
-            */
             headers.set("Content-Type", "application/json")
             return headers;
         }
