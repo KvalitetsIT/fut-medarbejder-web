@@ -1,11 +1,7 @@
-import { ValidationSchemaExample } from "../feature/TodoApi/form"
-import { TodoList } from "../feature/TodoApi/todoList"
+import { Typography } from "@mui/material"
 
 export const HomePage = () => {
     return (
-        <>
-        <TodoList></TodoList>
-        <ValidationSchemaExample></ValidationSchemaExample>
-        </>
+        <Typography variant="h4">Homepage</Typography>
     )
 }
