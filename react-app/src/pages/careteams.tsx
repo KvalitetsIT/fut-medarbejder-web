@@ -5,6 +5,7 @@ import { useGetCareTeamsQuery } from "../feature/api/careteams";
 
 export function CareTeams() {
     const { data: careteams, isLoading } = useGetCareTeamsQuery(undefined);
+    console.log(careteams);
 
     return (
         <>
@@ -16,7 +17,7 @@ export function CareTeams() {
                 <List>
                     {   
                         careteams && careteams.map((careteam) =>
-                            <ListItem component={Link} to={`/careteams/${careteam.uuid}`} sx={{
+                            <ListItem component={Link} to={`/careteams/${careteam.id}`} sx={{
                                 padding: 1,
                                 border: 2,
                                 borderColor: "#EEEEEE",

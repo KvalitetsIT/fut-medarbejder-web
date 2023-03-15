@@ -1,17 +1,22 @@
 import { Box, Divider, Typography } from "@mui/material"
 import { useParams } from "react-router-dom";
+import { Patient } from "../components/Patient";
 import { useGetEpisodeOfCareQuery } from "../feature/api/episodeOfCares";
+import { useGetPatientQuery } from "../feature/api/patients";
 
 export function EpisodeOfCare() {
-    const { id } = useParams();
+    const { id, careTeamId } = useParams();
     const eocId = parseInt(id || "0");
     const { data: episodeOfCare, isLoading } = useGetEpisodeOfCareQuery(eocId);
 
-    console.log(episodeOfCare);
+    const patientId = episodeOfCare?.patientId || "";
+    
 
-    return (
+    if (isLoading) {
+        return <p>Loading...</p>;
+    } else return (
         <>
-            <Typography variant="h4">{isLoading ? <p>Loading...</p> : episodeOfCare?.uuid}</Typography>
+            <Typography variant="h4">Episode of Care</Typography>
 
             <Divider />
 
@@ -26,7 +31,8 @@ export function EpisodeOfCare() {
                 <>
                     <p>Id: {episodeOfCare?.uuid}</p>
                     <p>Status: {episodeOfCare?.status}</p>
-                    <p>Patient id: {episodeOfCare?.patientId}</p>
+                    
+                    <Patient patientId={patientId} careTeamId={careTeamId || ""}></Patient>
                 </>
             }
             </Box>

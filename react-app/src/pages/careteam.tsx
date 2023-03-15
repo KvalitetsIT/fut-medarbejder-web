@@ -26,7 +26,8 @@ export function CareTeam() {
             {
                 isLoading ? <></> :
                 <>
-                    <p>Id: {careteam?.uuid}</p>
+                    <p>Id: {careteam?.id}</p>
+                    <p>Resource: {careteam?.resource}</p>
                     <p>Name: {careteam?.name}</p>
                     <p>Status: {careteam?.status}</p>
                     <p>Organizationer:
@@ -39,7 +40,7 @@ export function CareTeam() {
                         </ol>            
                     </p>
                             
-                    <EpisodesOfCares careTeamId={careteam ? careteam.uuid : ""} />
+                    <EpisodesOfCares careTeamId={careteam ? careteam.id : ""} />
                 </>
             }
             </Box>

@@ -24,7 +24,7 @@ export function EpisodesOfCares(props: EpisodesOfCaresProps) {
                 <List>
                     {   
                         episodeOfCares && episodeOfCares.map((eoc) =>
-                            <ListItem component={Link} to={`/episodeofcare/${eoc.uuid}`} sx={{
+                            <ListItem component={Link} to={`/careteams/${careTeamId}/episodeofcare/${eoc.uuid}`} sx={{
                                 padding: 1,
                                 border: 2,
                                 borderColor: "#EEEEEE",

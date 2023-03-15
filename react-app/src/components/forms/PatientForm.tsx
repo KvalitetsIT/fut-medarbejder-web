@@ -35,7 +35,7 @@ export function PatientForm(props: PatientFormProps) {
     })
 
     const defaultValues: Patient = {
-        uuid: "",
+        id: "",
         firstName: "",
         lastName: "",
         cpr: ""

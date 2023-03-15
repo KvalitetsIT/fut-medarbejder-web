@@ -51,7 +51,7 @@ function App() {
                             <Route path="/patients" element={<Patients />} />
                             <Route path="/careteams" element={<CareTeams />} />
                             <Route path="/careteams/:id" element={<CareTeam />} />
-                            <Route path="/episodeofcare/:id" element={<EpisodeOfCare />} />
+                            <Route path="/careteams/:careTeamId/episodeofcare/:id" element={<EpisodeOfCare />} />
                             <Route path="*" element={<Typography>Page not found</Typography>} />
                             
                             </Routes>
