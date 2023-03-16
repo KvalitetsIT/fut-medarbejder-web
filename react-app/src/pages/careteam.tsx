@@ -1,20 +1,34 @@
 import { Box, Divider, Typography } from "@mui/material"
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { EpisodesOfCares } from "../components/EpisodeOfCares";
+import { CreateEpisodeOfCareForm } from "../components/forms/CreateEpisodeOfCareForm";
 import { useGetCareTeamQuery } from "../feature/api/careteams";
+import { usePostCreateEpisodeOfCareMutation } from "../feature/api/episodeOfCares";
+import CreateEpisodeOfCare from "../models/CreateEpisodeOfCare";
 
+enum Mode {
+    NORMAL = "normal",
+    ADD = "add",
+    DELETE = "delete",
+    UPDATE = "update",
+}
 
 export function CareTeam() {
     const { id } = useParams(); 
     const careTeamId : number = parseInt(id ? id : "");
     const { data: careteam, isLoading } = useGetCareTeamQuery(careTeamId);
+    const [
+        createEOC, // This is the mutation trigger
+        { isLoading: isUpdating }, // This is the destructured mutation result
+      ] = usePostCreateEpisodeOfCareMutation();
 
-    console.log(careteam);
+    const [mode, setMode] = useState(Mode.NORMAL);
 
     return (
         <>
             <Typography variant="h4">{isLoading ? <p>Loading...</p> : careteam?.name}</Typography>
-
+            
             <Divider />
 
             <Box sx={{
@@ -38,7 +52,22 @@ export function CareTeam() {
                                 </li>
                             )}
                         </ol>            
-                    </p>
+                            </p>
+                            
+                    <Divider />
+                    <br/>
+                    <Typography variant="h5">Opret ny Episode of Care</Typography>
+                    <br/>
+                    <CreateEpisodeOfCareForm 
+                        careTeamId={careTeamId}   
+                        onSubmit={async (submission: CreateEpisodeOfCare) => {
+                            createEOC(submission);
+                            setMode(Mode.NORMAL);
+                        } }
+                        onCancel={() => {
+                            setMode(Mode.NORMAL);
+                        }} />
+                    <br/>
                             
                     <EpisodesOfCares careTeamId={careteam ? careteam.id : ""} />
                 </>
@@ -48,3 +77,4 @@ export function CareTeam() {
         </>
     )
 }
+

@@ -3,7 +3,6 @@ import { useGetPatientsQuery } from "../feature/api/patients"
 
 export function Patients() {
     const { data: patients, isLoading: fetchingPatients } = useGetPatientsQuery(undefined);
-    console.log(patients);
 
     return (
         <>

@@ -5,7 +5,6 @@ import { useGetCareTeamsQuery } from "../feature/api/careteams";
 
 export function CareTeams() {
     const { data: careteams, isLoading } = useGetCareTeamsQuery(undefined);
-    console.log(careteams);
 
     return (
         <>

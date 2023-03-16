@@ -1,4 +1,4 @@
-import { FormControl, Stack, Button, CircularProgress, Box } from "@mui/material";
+import { FormControl, Stack, Button, CircularProgress } from "@mui/material";
 import { Formik, Form } from "formik";
 import { t } from "i18next";
 import * as yup from 'yup';
@@ -8,8 +8,7 @@ import 'dayjs/locale/de';
 import 'dayjs/locale/ar-sa';
 import 'dayjs/locale/da';
 import { ValidatedTextField } from "../input/validatedTextField";
-
-import Patient from "../../models/Patient";
+import CreateEpisodeOfCare from "../../models/CreateEpisodeOfCare";
 
 export interface FormProps<T> {
     onSubmit: (submission: T) => Promise<void>
@@ -17,61 +16,48 @@ export interface FormProps<T> {
     isLoading?: boolean
 }
 
-interface PatientFormProps extends FormProps<Patient> {
-    patient?: Patient
-    loading?: boolean
+interface CreateEpisodeOfCareFormProps extends FormProps<CreateEpisodeOfCare> {
+    createEOC?: CreateEpisodeOfCare,
+    loading?: boolean, 
+    careTeamId: number
 }
 
-export function PatientForm(props: PatientFormProps) {
+export function CreateEpisodeOfCareForm(props: CreateEpisodeOfCareFormProps) {
 
     const validationSchema = yup.object().shape({
-        patient: yup.object().shape({
-            lastName: yup.string().required(t("Subject") +" "+ t("is required")),
-            firstName: yup.string().required(t("Message") +" "+ t("is required")),
+        createEOC: yup.object().shape({
+            patientId: yup.string().required(t("Man skal angive patientId.")),
         }),
     })
 
-    const defaultValues: Patient = {
-        id: "",
-        firstName: "",
-        lastName: "",
-        cpr: ""
+    const defaultValues: CreateEpisodeOfCare = {
+        patientId: 258981,
+        careTeamId: props.careTeamId,
+        provenance: "http://ehealth.sundhed.dk/policy/dk/sundhedsloven"
     }
 
     if (props.isLoading) return (<></>)
     return (
-        <FormControl fullWidth>
+        <FormControl>
             <Formik
                 initialValues={{
-                    patient: props.patient ?? defaultValues,
+                    createEOC: props.createEOC ?? defaultValues,
                     checked: false
                 }}
-                onSubmit={(values) => props.onSubmit(values.patient)}
+                onSubmit={(values) => props.onSubmit(values.createEOC)}
                 validationSchema={validationSchema}
                 enableReinitialize
-
             >
+                
                 {({ errors, touched, values, handleChange, setFieldValue }) => (
                     <Form>
                         <Stack spacing={2}>
                             <ValidatedTextField
                                 type={"text"}
-                                error={errors.patient?.firstName && touched.patient?.firstName ? errors.patient.firstName : undefined}
-                                label={t("First Name")}
-                                name="patient.firstName"
-                                value={values.patient?.firstName}
-                                onChange={(input) => {
-                                    console.log(input);
-                                    handleChange(input);
-                                }}
-                            />
-
-                            <ValidatedTextField
-                                type={"text"}
-                                error={errors.patient?.lastName && touched.patient?.lastName ? errors.patient.lastName : undefined}
-                                label={t("Last Name")}
-                                name="patient.lastName"
-                                value={values.patient?.lastName}
+                                name="createEOC.patientId"
+                                label={t("PatientId på patient der skal oprettes for")}
+                                value={values.createEOC.patientId}
+                                error={errors.createEOC?.patientId && touched.createEOC?.patientId ? errors.createEOC.patientId : undefined}
                                 onChange={handleChange}
                             />
 

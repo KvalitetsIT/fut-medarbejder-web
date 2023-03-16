@@ -1,4 +1,4 @@
-import { Divider, List, ListItem, ListItemText, Typography } from "@mui/material";
+import { Box, Divider, List, ListItem, ListItemText, Typography } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { useGetEpisodeOfCaresQuery } from "../feature/api/episodeOfCares";
 
@@ -10,37 +10,41 @@ export function EpisodesOfCares(props: EpisodesOfCaresProps) {
     const { id } = useParams(); 
     
     const careTeamId = parseInt(id || "0");
-    console.log("careTeamId", careTeamId);
-    const { data: episodeOfCares, isLoading } = useGetEpisodeOfCaresQuery(careTeamId);
-    console.log(episodeOfCares);
+    const { data, isLoading } = useGetEpisodeOfCaresQuery(careTeamId);
 
-    return (
+    const episodeOfCares = data;//data?.slice();
+    //episodeOfCares?.sort((a, b) => parseInt(b.uuid) - parseInt(a.uuid));
+
+    if (isLoading) {
+        return <p>Is loading...</p>
+    } else return (
         <>
             <Divider />
+            <br/>
             <Typography variant="h5">Episodes of Care</Typography>
-            
-            {
-                isLoading ? <p>Loading...</p> : 
+                   
+            <Box sx={{ width: 1 / 2 }}>
                 <List>
-                    {   
+                    {
                         episodeOfCares && episodeOfCares.map((eoc) =>
                             <ListItem component={Link} to={`/careteams/${careTeamId}/episodeofcare/${eoc.uuid}`} sx={{
-                                padding: 1,
-                                border: 2,
-                                borderColor: "#EEEEEE",
+
+                                margin: 1,
+                                border: 0,
                                 textAlign: "left",
                                 display: "list-item",
-                                backgroundColor: "#d5e6f7"
+                                backgroundColor: "#c0d7ed"
                             }}>
                                 <ListItemText
                                     primary={eoc.uuid}
                                     secondary={eoc.status}
                                 />
-                            
+                        
                             </ListItem>)
                     }
                 </List>
-            }
+            </Box>
+                
         </>
 
     )

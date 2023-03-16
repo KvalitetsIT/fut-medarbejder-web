@@ -25,10 +25,5 @@ export function ValidatedTextField(props: ValidatedTextFieldProps) {
 ValidatedTextField.defaultProps = {
     variant: "outlined",
     type: "text",
-
 }
-
-
-
-
 

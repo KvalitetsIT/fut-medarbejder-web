@@ -1,3 +1,4 @@
+import CreateEpisodeOfCare from '../../models/CreateEpisodeOfCare';
 import EpisodeOfCare from '../../models/EpisodeOfCare';
 import { futApiSlice } from '../../redux/futApiSlice';
 import handleResponse from '../../redux/handleResponse';
@@ -15,7 +16,7 @@ export const episodeOfCareSlice = futApiSlice.injectEndpoints({
           toastErrorText: "Episodes of Cares could not be fetched"
         }),
       }),
-      providesTags: ["episode-of-cares"]
+      providesTags: ["episode-of-care"]
     }),
     getEpisodeOfCare: builder.query<EpisodeOfCare, number>({
       query: (episodeOfCareId) => ({
@@ -27,10 +28,26 @@ export const episodeOfCareSlice = futApiSlice.injectEndpoints({
         }),
       }),
       providesTags: ["episode-of-care"]
-    })
+    }),
+    postCreateEpisodeOfCare: builder.mutation<number, CreateEpisodeOfCare>({
+      query: (createEOC) => ({
+        url: `episodeofcares`,
+        method: "POST",
+        body: createEOC,
+        responseHandler: (res) => handleResponse({
+          response: res, toastWithResult: false,
+          toastErrorText: "Episode of Care could not be created"
+        }),
+      }),
+      invalidatesTags: ["episode-of-care"]
+    }),
   })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetEpisodeOfCaresQuery, useGetEpisodeOfCareQuery } = episodeOfCareSlice;
+export const {
+  useGetEpisodeOfCaresQuery,
+  useGetEpisodeOfCareQuery,
+  usePostCreateEpisodeOfCareMutation
+} = episodeOfCareSlice;
