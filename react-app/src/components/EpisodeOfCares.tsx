@@ -12,8 +12,8 @@ export function EpisodesOfCares(props: EpisodesOfCaresProps) {
     const careTeamId = parseInt(id || "0");
     const { data, isLoading } = useGetEpisodeOfCaresQuery(careTeamId);
 
-    const episodeOfCares = data;//data?.slice();
-    //episodeOfCares?.sort((a, b) => parseInt(b.uuid) - parseInt(a.uuid));
+    const episodeOfCares = data?.slice();
+    episodeOfCares?.sort((a, b) => parseInt(b.uuid) - parseInt(a.uuid));
 
     if (isLoading) {
         return <p>Is loading...</p>
