@@ -1,5 +1,7 @@
 import CreateEpisodeOfCare from '../../models/CreateEpisodeOfCare';
+import CreateConsent from '../../models/CreateConsent';
 import EpisodeOfCare from '../../models/EpisodeOfCare';
+import Consent from '../../models/Consent';
 import { futApiSlice } from '../../redux/futApiSlice';
 import handleResponse from '../../redux/handleResponse';
 
@@ -29,6 +31,17 @@ export const episodeOfCareSlice = futApiSlice.injectEndpoints({
       }),
       providesTags: ["episode-of-care"]
     }),
+    getConsentsForEpisodeOfCare: builder.query<Consent[], number>({
+      query: (episodeOfCareId) => ({
+        url: `episodeofcares/${episodeOfCareId}/consents`,
+        method: "GET",
+        responseHandler: (res) => handleResponse({
+          response: res, toastWithResult: false,
+          toastErrorText: `Consents for Episodes of Care ${episodeOfCareId} could not be fetched`
+        }),
+      }),
+      providesTags: ["episode-of-care"]
+    }),
     postCreateEpisodeOfCare: builder.mutation<number, CreateEpisodeOfCare>({
       query: (createEOC) => ({
         url: `episodeofcares`,
@@ -41,6 +54,18 @@ export const episodeOfCareSlice = futApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["episode-of-care"]
     }),
+    postCreateConsentForEpisodeOfCare: builder.mutation<number, CreateConsent>({
+      query: (createConsent) => ({
+        url: `episodeofcares/${createConsent.episodeOfCareId}/consents`,
+        method: "POST",
+        body: {status: createConsent.status, category: createConsent.category},
+        responseHandler: (res) => handleResponse({
+          response: res, toastWithResult: false,
+          toastErrorText: "Consent could not be created"
+        }),
+      }),
+      invalidatesTags: ["episode-of-care"]
+    }),
   })
 })
 
@@ -49,5 +74,7 @@ export const episodeOfCareSlice = futApiSlice.injectEndpoints({
 export const {
   useGetEpisodeOfCaresQuery,
   useGetEpisodeOfCareQuery,
-  usePostCreateEpisodeOfCareMutation
+  useGetConsentsForEpisodeOfCareQuery,
+  usePostCreateEpisodeOfCareMutation,
+  usePostCreateConsentForEpisodeOfCareMutation
 } = episodeOfCareSlice;
