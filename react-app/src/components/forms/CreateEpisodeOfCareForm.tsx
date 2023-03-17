@@ -9,7 +9,6 @@ import 'dayjs/locale/ar-sa';
 import 'dayjs/locale/da';
 import { ValidatedTextField } from "../input/validatedTextField";
 import CreateEpisodeOfCare from "../../models/CreateEpisodeOfCare";
-import { useGetPatientsQuery } from "../../feature/api/patients";
 
 export interface FormProps<T> {
     onSubmit: (submission: T) => Promise<void>
@@ -24,14 +23,12 @@ interface CreateEpisodeOfCareFormProps extends FormProps<CreateEpisodeOfCare> {
 }
 
 export function CreateEpisodeOfCareForm(props: CreateEpisodeOfCareFormProps) {
-    const { data: patients, isLoading: fetchingPatients } = useGetPatientsQuery(undefined);
-    //console.log(patients);
 
     const validationSchema = yup.object().shape({
         createEOC: yup.object().shape({
+            patientId: yup.string().required(t("Patient med cpr nr findes ikke i systemet.")),
             patientCpr: yup.string().required(t("Man skal angive patient cpr."))
-                .length(10, t("CPR skal være på 10 cifre")),
-            patientId: yup.string().required(t("Patient med cpr nr findes ikke i systemet."))
+                .length(10, t("CPR skal være på 10 cifre"))
         }),
     })
 
@@ -47,12 +44,10 @@ export function CreateEpisodeOfCareForm(props: CreateEpisodeOfCareFormProps) {
         checked: boolean;
     }>) {
         if (errors.createEOC?.patientCpr) return errors.createEOC?.patientCpr;
-        if (errors.createEOC?.patientId) return errors.createEOC?.patientId;
         return undefined;
-    }   
+    }
 
-
-    if (props.isLoading || fetchingPatients) return (<p>Loading...</p>)
+    if (props.isLoading) return (<p>Loading...</p>)
     return (
         <Box sx={{width: '50%'}}>
         <FormControl fullWidth>
@@ -75,13 +70,7 @@ export function CreateEpisodeOfCareForm(props: CreateEpisodeOfCareFormProps) {
                                 label={t("Patient CPR nr")}
                                 value={values.createEOC?.patientCpr}
                                 error={errorHandler(errors)}
-                                onChange={(value) => {
-                                    handleChange(value);
-                                    const cpr = value.currentTarget.value;
-                                    const patient = patients?.find(p => p.cpr === cpr);
-                                    console.log("patientId", patient?.id);
-                                    setFieldValue("createEOC.patientId", patient?.id);
-                                }}
+                                onChange={handleChange}
                             />
 
                             <Stack spacing={2} direction={"row"}>

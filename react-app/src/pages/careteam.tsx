@@ -6,6 +6,7 @@ import { CreateEpisodeOfCareForm } from "../components/forms/CreateEpisodeOfCare
 import { PatientForm } from "../components/forms/PatientForm";
 import { useGetCareTeamQuery } from "../feature/api/careteams";
 import { usePostCreateEpisodeOfCareMutation } from "../feature/api/episodeOfCares";
+import { useGetPatientsQuery } from "../feature/api/patients";
 import CreateEpisodeOfCare from "../models/CreateEpisodeOfCare";
 import Patient from "../models/Patient";
 
@@ -24,6 +25,8 @@ export function CareTeam() {
         createEOC, // This is the mutation trigger
         { isLoading: isUpdating }, // This is the destructured mutation result
       ] = usePostCreateEpisodeOfCareMutation();
+
+    const { data: patients, isLoading: fetchingPatients } = useGetPatientsQuery(undefined);
 
     const [mode, setMode] = useState(Mode.NORMAL);
 
@@ -62,8 +65,18 @@ export function CareTeam() {
                     <br/>
                     <CreateEpisodeOfCareForm 
                         careTeamId={careTeamId}   
-                        onSubmit={async (submission: CreateEpisodeOfCare) => {
-                            createEOC(submission);
+                            onSubmit={async (submission: CreateEpisodeOfCare) => {
+                                
+                            const patientId = patients?.find(p => p.cpr === submission.patientCpr)?.id;
+                            const newEoc = {
+                                patientCpr: submission.patientCpr,
+                                patientId: parseInt(patientId ? patientId : "-1"),
+                                careTeamId: submission.careTeamId,
+                                provenance: submission.provenance
+                            };
+                                
+                            // TODO: Error handling on patientId!
+                            createEOC(newEoc);
                             setMode(Mode.NORMAL);
                         } }
                         onCancel={() => {
