@@ -1,5 +1,5 @@
-import { FormControl, Stack, Button, CircularProgress } from "@mui/material";
-import { Formik, Form } from "formik";
+import { FormControl, Stack, Button, CircularProgress, Box } from "@mui/material";
+import { Formik, Form, FormikErrors } from "formik";
 import { t } from "i18next";
 import * as yup from 'yup';
 import 'dayjs/locale/fr';
@@ -9,6 +9,7 @@ import 'dayjs/locale/ar-sa';
 import 'dayjs/locale/da';
 import { ValidatedTextField } from "../input/validatedTextField";
 import CreateEpisodeOfCare from "../../models/CreateEpisodeOfCare";
+import { useGetPatientsQuery } from "../../feature/api/patients";
 
 export interface FormProps<T> {
     onSubmit: (submission: T) => Promise<void>
@@ -23,22 +24,38 @@ interface CreateEpisodeOfCareFormProps extends FormProps<CreateEpisodeOfCare> {
 }
 
 export function CreateEpisodeOfCareForm(props: CreateEpisodeOfCareFormProps) {
+    const { data: patients, isLoading: fetchingPatients } = useGetPatientsQuery(undefined);
+    //console.log(patients);
 
     const validationSchema = yup.object().shape({
         createEOC: yup.object().shape({
-            patientId: yup.string().required(t("Man skal angive patientId.")),
+            patientCpr: yup.string().required(t("Man skal angive patient cpr."))
+                .length(10, t("CPR skal være på 10 cifre")),
+            patientId: yup.string().required(t("Patient med cpr nr findes ikke i systemet."))
         }),
     })
 
     const defaultValues: CreateEpisodeOfCare = {
-        patientId: 258981,
+        patientCpr: "1110109996",
+        patientId: -1,
         careTeamId: props.careTeamId,
         provenance: "http://ehealth.sundhed.dk/policy/dk/sundhedsloven"
     }
 
-    if (props.isLoading) return (<></>)
+    function errorHandler(errors : FormikErrors<{
+        createEOC: CreateEpisodeOfCare;
+        checked: boolean;
+    }>) {
+        if (errors.createEOC?.patientCpr) return errors.createEOC?.patientCpr;
+        if (errors.createEOC?.patientId) return errors.createEOC?.patientId;
+        return undefined;
+    }   
+
+
+    if (props.isLoading || fetchingPatients) return (<p>Loading...</p>)
     return (
-        <FormControl>
+        <Box sx={{width: '50%'}}>
+        <FormControl fullWidth>
             <Formik
                 initialValues={{
                     createEOC: props.createEOC ?? defaultValues,
@@ -54,11 +71,17 @@ export function CreateEpisodeOfCareForm(props: CreateEpisodeOfCareFormProps) {
                         <Stack spacing={2}>
                             <ValidatedTextField
                                 type={"text"}
-                                name="createEOC.patientId"
-                                label={t("PatientId på patient der skal oprettes for")}
-                                value={values.createEOC.patientId}
-                                error={errors.createEOC?.patientId && touched.createEOC?.patientId ? errors.createEOC.patientId : undefined}
-                                onChange={handleChange}
+                                name="createEOC.patientCpr"
+                                label={t("Patient CPR nr")}
+                                value={values.createEOC?.patientCpr}
+                                error={errorHandler(errors)}
+                                onChange={(value) => {
+                                    handleChange(value);
+                                    const cpr = value.currentTarget.value;
+                                    const patient = patients?.find(p => p.cpr === cpr);
+                                    console.log("patientId", patient?.id);
+                                    setFieldValue("createEOC.patientId", patient?.id);
+                                }}
                             />
 
                             <Stack spacing={2} direction={"row"}>
@@ -79,5 +102,6 @@ export function CreateEpisodeOfCareForm(props: CreateEpisodeOfCareFormProps) {
 
             </Formik>
         </FormControl >
+        </Box>
     )
 }

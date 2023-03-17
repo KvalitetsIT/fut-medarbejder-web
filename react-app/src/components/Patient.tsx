@@ -20,7 +20,6 @@ export function Patient(props: PatientProps) {
             <p>Navn: {patient?.firstName} {patient?.lastName}</p>
             <p>CPR: {patient?.cpr}</p>
             <p>Id: {patient?.id}</p>
-
         </>
     )
 }

@@ -40,8 +40,8 @@ export function PatientForm(props: PatientFormProps) {
 
     if (props.isLoading) return (<></>)
     return (
-        <FormControl fullWidth>
-            <Formik
+        <FormControl>
+            <Formik 
                 initialValues={{
                     patient: props.patient ?? defaultValues,
                     checked: false
@@ -56,14 +56,11 @@ export function PatientForm(props: PatientFormProps) {
                         <Stack spacing={2}>
                             <ValidatedTextField
                                 type={"text"}
-                                error={errors.patient?.firstName && touched.patient?.firstName ? errors.patient.firstName : undefined}
                                 label={t("First Name")}
                                 name="patient.firstName"
                                 value={values.patient?.firstName}
-                                onChange={(input) => {
-                                    console.log(input);
-                                    handleChange(input);
-                                }}
+                                error={errors.patient?.firstName && touched.patient?.firstName ? errors.patient.firstName : undefined}
+                                onChange={handleChange}
                             />
 
                             <ValidatedTextField

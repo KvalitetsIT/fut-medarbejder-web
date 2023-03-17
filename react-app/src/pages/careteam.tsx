@@ -3,9 +3,11 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { EpisodesOfCares } from "../components/EpisodeOfCares";
 import { CreateEpisodeOfCareForm } from "../components/forms/CreateEpisodeOfCareForm";
+import { PatientForm } from "../components/forms/PatientForm";
 import { useGetCareTeamQuery } from "../feature/api/careteams";
 import { usePostCreateEpisodeOfCareMutation } from "../feature/api/episodeOfCares";
 import CreateEpisodeOfCare from "../models/CreateEpisodeOfCare";
+import Patient from "../models/Patient";
 
 enum Mode {
     NORMAL = "normal",
@@ -67,7 +69,16 @@ export function CareTeam() {
                         onCancel={() => {
                             setMode(Mode.NORMAL);
                         }} />
-                    <br/>
+                    <br />
+                    {/*
+                    <PatientForm 
+                    onSubmit={async (submission: Patient) => {
+                        //postPatient(submission)
+                        setMode(Mode.NORMAL)
+                    }} onCancel={() => {
+                        setMode(Mode.NORMAL)
+                    }} />
+                    */}
                             
                     <EpisodesOfCares careTeamId={careteam ? careteam.id : ""} />
                 </>
