@@ -1,5 +1,5 @@
 export default interface CreateConsent {
-    episodeOfCareId: string;
+    episodeOfCareId: number;
     status: string;
     category: string;
 }
