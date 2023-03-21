@@ -1,4 +1,5 @@
 import CreateEpisodeOfCare from '../../models/CreateEpisodeOfCare';
+import UpdateEpisodeOfCare from '../../models/UpdateEpisodeOfCare';
 import CreateConsent from '../../models/CreateConsent';
 import EpisodeOfCare from '../../models/EpisodeOfCare';
 import Consent from '../../models/Consent';
@@ -30,6 +31,18 @@ export const episodeOfCareSlice = futApiSlice.injectEndpoints({
         }),
       }),
       providesTags: ["episode-of-care"]
+    }),
+    updateEpisodeOfCare: builder.mutation<number, UpdateEpisodeOfCare>({
+      query: (updateEpisodeOfCare) => ({
+        url: `episodeofcares/${updateEpisodeOfCare.episodeOfCareId}`,
+        method: "PATCH",
+        body: { status: updateEpisodeOfCare.status },
+        responseHandler: (res) => handleResponse({
+          response: res, toastWithResult: false,
+          toastErrorText: `Episodes of Care ${updateEpisodeOfCare.episodeOfCareId} could not be updated`
+        }),
+      }),
+      invalidatesTags: ["episode-of-care"]
     }),
     getConsentsForEpisodeOfCare: builder.query<Consent[], number>({
       query: (episodeOfCareId) => ({
@@ -74,6 +87,7 @@ export const episodeOfCareSlice = futApiSlice.injectEndpoints({
 export const {
   useGetEpisodeOfCaresQuery,
   useGetEpisodeOfCareQuery,
+  useUpdateEpisodeOfCareMutation,
   useGetConsentsForEpisodeOfCareQuery,
   usePostCreateEpisodeOfCareMutation,
   usePostCreateConsentForEpisodeOfCareMutation
