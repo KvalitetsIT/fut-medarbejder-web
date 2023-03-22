@@ -4,8 +4,12 @@ import { useParams } from "react-router-dom";
 import { Patient } from "../components/Patient";
 import { Consents } from "../components/Consents";
 import { useGetEpisodeOfCareQuery, useUpdateEpisodeOfCareMutation, useGetConsentsForEpisodeOfCareQuery } from "../feature/api/episodeOfCares";
+import { usePostCreateCarePlanMutation } from "../feature/api/careplans";
 import UpdateEpisodeOfCare from "../models/UpdateEpisodeOfCare";
 import { t } from "i18next";
+import { CreateCarePlanForm } from "../components/forms/CreateCarePlanForm";
+import CreateCarePlan from "../models/CreateCarePlan";
+import { CarePlans } from "../components/CarePlans";
 
 enum Mode {
     NORMAL = "normal",
@@ -27,6 +31,10 @@ export function EpisodeOfCare() {
         updateEpisodeOfCare, // This is the mutation trigger
         { isLoading: isUpdating }, // This is the destructured mutation result
       ] = useUpdateEpisodeOfCareMutation();
+    const [
+        createCarePlan, // This is the mutation trigger
+        { isLoading: carePlanUpdating }, // This is the destructured mutation result
+      ] = usePostCreateCarePlanMutation();
       
     const [mode, setMode] = useState(Mode.NORMAL);
 
@@ -74,7 +82,32 @@ export function EpisodeOfCare() {
                     {isLoading ? <CircularProgress color={"inherit"} size={"1.5em"}></CircularProgress> : <>{t("Activate Episode Of Care")}</>}
                 </Button>
             </Stack>   
-            </Stack>         
+            </Stack>
+
+            <Divider />
+                    <br/>
+                    <Typography variant="h5">Opret ny CarePlan</Typography>
+                    <br/>
+                    <CreateCarePlanForm 
+                        episodeOfCareId={eocId}
+                        onSubmit={async (submission: CreateCarePlan) => {
+                            console.log("hello")
+                                
+                            //const patientId = patients?.find(p => p.cpr === submission.patientCpr)?.id;
+                            const newCarePlan = {
+                                episodeOfCareId: submission.episodeOfCareId,
+                                planDefinitionId: submission.planDefinitionId
+                            };
+                                
+                            // TODO: Error handling on patientId!
+                            createCarePlan(newCarePlan);
+                            setMode(Mode.NORMAL);
+                        } }
+                        onCancel={() => {
+                            setMode(Mode.NORMAL);
+                        }} />
+                    <br />
+                    <CarePlans careTeamId={careTeamId!} episodeOfCareId={id!} />
         </>
     )
 }
