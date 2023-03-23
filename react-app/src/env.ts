@@ -7,6 +7,9 @@ interface env {
     REACT_APP_KEYCLOAK_URL : string
     REACT_APP_KEYCLOAK_REALM : string
     REACT_APP_KEYCLOAK_CLIENTID : string
+
+    REACT_APP_MOCK_USERNAME : string
+    REACT_APP_MOCK_CARETEAM_ID : string
 }
 
 export default function getEnvironment(): env {

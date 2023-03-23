@@ -1,5 +1,5 @@
 import { Box, Divider, Typography, Stack, Button, CircularProgress } from "@mui/material"
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Patient } from "../components/Patient";
 import { Consents } from "../components/Consents";
@@ -10,6 +10,7 @@ import { t } from "i18next";
 import { CreateCarePlanForm } from "../components/forms/CreateCarePlanForm";
 import CreateCarePlan from "../models/CreateCarePlan";
 import { CarePlans } from "../components/CarePlans";
+import { UserContext } from "../feature/authentication/logic/FetchUser";
 
 enum Mode {
     NORMAL = "normal",
@@ -19,7 +20,7 @@ enum Mode {
 }
 
 export function EpisodeOfCare() {
-    const { id, careTeamId } = useParams();
+    const { id } = useParams();
     const eocId = parseInt(id || "0");
     const { data: episodeOfCare, isLoading } = useGetEpisodeOfCareQuery(eocId);
     const { data: consents, isLoading: consentsLoading } = useGetConsentsForEpisodeOfCareQuery(eocId);
@@ -38,39 +39,34 @@ export function EpisodeOfCare() {
       
     const [mode, setMode] = useState(Mode.NORMAL);
 
+    const careTeamId = useContext(UserContext)?.careTeamId;
+
     if (isLoading) {
         return <p>Loading...</p>;
     } else return (
         <>
             <Stack spacing={2}>
-            <Typography variant="h4">Episode of Care</Typography>
+                <Typography variant="h4">Episode of Care</Typography>
 
-            <Divider />
+                <Divider />
 
-            <Box sx={{
-                width: '100%',
-                bgcolor: "#d5e6f7",
-                paddingTop: "0.1em",
-                paddingLeft: "0.5em"
-            }}>
-            {
-                isLoading ? <></> :
-                <>
+                <Box sx={{
+                    width: '100%',
+                    bgcolor: "#d5e6f7",
+                    paddingTop: "0.1em",
+                    paddingLeft: "0.5em"
+                }}>
+                {
+                    isLoading ? <></> :
+                    <>
+                        <p>Id: {episodeOfCare?.uuid}</p>
+                        <p>Status: {episodeOfCare?.status}</p>
                     
-                    <p>Id: {episodeOfCare?.uuid}</p>
-                    <p>Status: {episodeOfCare?.status}</p>
-                    
-                    <Patient patientId={patientId} careTeamId={careTeamId || ""}></Patient>
-                    
-                </>
-            }
-            </Box>
-            <Consents episodeOfCareId={eocId} consents={consents} isLoading={consentsLoading} />
             <Stack spacing={2} direction={"row"}>
                 <Button
                     variant="contained"
                     disabled={(isLoading || episodeOfCare!.status === 'active') || (consentsLoading || !consents || consents!.length == 0)}
-                    fullWidth={true}
+                    fullWidth={false}
                     onClick={() => {
                         let data: UpdateEpisodeOfCare = {
                             episodeOfCareId: eocId,
@@ -82,6 +78,12 @@ export function EpisodeOfCare() {
                     {isLoading ? <CircularProgress color={"inherit"} size={"1.5em"}></CircularProgress> : <>{t("Activate Episode Of Care")}</>}
                 </Button>
             </Stack>   
+                    </>
+                }
+                </Box>
+                <Patient patientId={patientId} careTeamId={careTeamId || ""}></Patient>
+                <Divider />
+            <Consents episodeOfCareId={eocId} consents={consents} isLoading={consentsLoading} />
             </Stack>
 
             <Divider />

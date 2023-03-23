@@ -1,5 +1,4 @@
 import { futApiSlice } from '../../redux/futApiSlice';
-import CareTeam from '../../models/CareTeam';
 import handleResponse from '../../redux/handleResponse';
 import CreateCarePlan from '../../models/CreateCarePlan';
 import CarePlan from '../../models/CarePlan';
@@ -18,7 +17,7 @@ export const carePlanSlice = futApiSlice.injectEndpoints({
           toastErrorText: "CarePlan could not be created"
         }),
       }),
-      invalidatesTags: ["episode-of-care"]
+      invalidatesTags: ["careplans"]
     }),
     getCarePlansOnEpisodeOfCareForCareTeam: builder.query<CarePlan[], any>({
       query: ({careTeamId, episodeOfCareId}) => ({
@@ -31,9 +30,25 @@ export const carePlanSlice = futApiSlice.injectEndpoints({
       }),
       providesTags: ["careplans"]
     }),
+    updateCarePlan: builder.mutation<number, any>({
+      query: ({episodeOfCareId, carePlanId, updateCarePlan }) => ({
+        url: `episodeofcares/${episodeOfCareId}/careplans/${carePlanId}`,
+        method: "PATCH",
+        body: updateCarePlan,
+        responseHandler: (res) => handleResponse({
+          response: res, toastWithResult: false,
+          toastErrorText: `CarePlan ${carePlanId} could not be updated`
+        }),
+      }),
+      invalidatesTags: ["careplans"]
+    }),
   })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { usePostCreateCarePlanMutation, useGetCarePlansOnEpisodeOfCareForCareTeamQuery } = carePlanSlice
+export const { 
+  usePostCreateCarePlanMutation, 
+  useGetCarePlansOnEpisodeOfCareForCareTeamQuery,
+  useUpdateCarePlanMutation
+} = carePlanSlice

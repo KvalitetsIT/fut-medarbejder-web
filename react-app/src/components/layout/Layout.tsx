@@ -45,7 +45,8 @@ export default function Layout(props: LayoutProps) {
           setMobileOpen={setMobileOpen}
           logo={<Title color={theme.palette.primary.contrastText} />}>
           <SidebarSection hideDivider title={"Public"}>
-            <SidebarItem title={t('CareTeams')} icon={<NotificationsActiveIcon />} href={"/careteams"} />
+            { /*<SidebarItem title={t('CareTeams')} icon={<NotificationsActiveIcon />} href={"/careteams"} />*/ }
+            <SidebarItem title={t('EpisodeOfCares')} icon={<NotificationsActiveIcon />} href={"/episodeofcares"} />
             <SidebarItem title={t('Patients')} icon={<NotificationsActiveIcon />} href={"/patients"} />
           </SidebarSection>
           

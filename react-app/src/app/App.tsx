@@ -16,6 +16,7 @@ import { Patients } from "../pages/patients";
 import { CareTeams } from "../pages/careteams";
 import store from "../redux/store";
 import { CareTeam } from "../pages/careteam";
+import { EpisodeOfCares } from "../pages/episodeOfCares";
 import { EpisodeOfCare } from "../pages/episodeOfCare";
 
 
@@ -49,9 +50,14 @@ function App() {
                             <Routes>
                             <Route path="/" element={<HomePage />} />
                             <Route path="/patients" element={<Patients />} />
-                            <Route path="/careteams" element={<CareTeams />} />
-                            <Route path="/careteams/:id" element={<CareTeam />} />
-                            <Route path="/careteams/:careTeamId/episodeofcare/:id" element={<EpisodeOfCare />} />
+                            {
+                            //<Route path="/careteams" element={<CareTeams />} />
+                            //<Route path="/careteams/:id" element={<CareTeam />} />
+                            //<Route path="/careteams/:careTeamId/episodeofcare/:id" element={<EpisodeOfCare />} />
+                            }
+                            <Route path="/episodeofcares" element={<EpisodeOfCares />} />
+                            <Route path="/episodeofcares/:id" element={<EpisodeOfCare />} />
+                            
                             <Route path="*" element={<Typography>Page not found</Typography>} />
                             
                             </Routes>

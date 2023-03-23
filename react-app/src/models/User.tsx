@@ -29,6 +29,7 @@ export class User extends Resource {
     // organisation?: OrganisationResponse
     permissions?: string[]
     token?: JWTToken
+    careTeamId?: string
     // roleToString(): string {
     //     switch (this.role) {
     //         case Role.ADMIN:

@@ -1,4 +1,5 @@
 
+import getEnvironment from "../../../env";
 import { Role, User } from "../../../models/User";
 import { getRoleFromStringArray, JWTToken } from "./FetchUser";
 
@@ -25,7 +26,16 @@ export default class UserFactory {
 
     createGuestUser(): User {
         const user = new User();
-        user.name = "Guest";
+        
+        /*
+        if (getEnvironment().REACT_APP_MOCK_USERNAME) {
+            user.name = getEnvironment().REACT_APP_MOCK_USERNAME;
+            user.roles.push(Role.ADMIN)
+            return user;
+        }
+        */
+        user.name = "Gr6_medarbejder9 Johnson";
+        user.careTeamId = "135884";
         user.roles.push(Role.UNKNOWN)
         return user;
     }
