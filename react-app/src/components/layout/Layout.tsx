@@ -48,6 +48,7 @@ export default function Layout(props: LayoutProps) {
             { /*<SidebarItem title={t('CareTeams')} icon={<NotificationsActiveIcon />} href={"/careteams"} />*/ }
             <SidebarItem title={t('EpisodeOfCares')} icon={<NotificationsActiveIcon />} href={"/episodeofcares"} />
             <SidebarItem title={t('Patients')} icon={<NotificationsActiveIcon />} href={"/patients"} />
+            <SidebarItem title={t('Tasks')} icon={<NotificationsActiveIcon />} href={"/tasks"} />
           </SidebarSection>
           
         </Sidebar>

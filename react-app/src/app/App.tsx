@@ -18,6 +18,7 @@ import store from "../redux/store";
 import { CareTeam } from "../pages/careteam";
 import { EpisodeOfCares } from "../pages/episodeOfCares";
 import { EpisodeOfCare } from "../pages/episodeOfCare";
+import { Tasks } from "../pages/tasks";
 
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
                             }
                             <Route path="/episodeofcares" element={<EpisodeOfCares />} />
                             <Route path="/episodeofcares/:id" element={<EpisodeOfCare />} />
+                            <Route path="/tasks" element={<Tasks />} />
                             
                             <Route path="*" element={<Typography>Page not found</Typography>} />
                             
