@@ -1,6 +1,7 @@
 import { futApiSlice } from '../../redux/futApiSlice';
 import handleResponse from '../../redux/handleResponse';
 import Task from '../../models/Task';
+import UpdateTask from '../../models/UpdateTask';
 
 // Define a service using a base URL and expected endpoints
 export const taskSlice = futApiSlice.injectEndpoints({
@@ -18,17 +19,28 @@ export const taskSlice = futApiSlice.injectEndpoints({
       }),
       providesTags: ["tasks"]
     }),
-    updateTask: builder.mutation<number, any>({
-      query: ({episodeOfCareId, carePlanId, updateCarePlan }) => ({
-        url: `episodeofcares/${episodeOfCareId}/careplans/${carePlanId}`,
-        method: "PATCH",
-        body: updateCarePlan,
+    getTaskByIdForCareTeam: builder.query<Task, any>({
+      query: ({careTeamId, taskId}) => ({
+        url: `careteams/${careTeamId}/tasks/${taskId}`,
+        method: "GET",
         responseHandler: (res) => handleResponse({
           response: res, toastWithResult: false,
-          toastErrorText: `CarePlan ${carePlanId} could not be updated`
+          toastErrorText: `Task ${taskId} could not be fetched`
         }),
       }),
-      invalidatesTags: ["careplans"]
+      providesTags: ["tasks"]
+    }),
+    updateTask: builder.mutation<number, UpdateTask>({
+      query: (updateTask) => ({
+        url: `episodeofcares/${updateTask.episodeOfCareId}/tasks/${updateTask.id}`,
+        method: "PATCH",
+        body: { status: updateTask.status },
+        responseHandler: (res) => handleResponse({
+          response: res, toastWithResult: false,
+          toastErrorText: `Task ${updateTask.id} could not be updated`
+        }),
+      }),
+      invalidatesTags: ["tasks"]
     }),
   })
 })
@@ -37,5 +49,6 @@ export const taskSlice = futApiSlice.injectEndpoints({
 // auto-generated based on the defined endpoints
 export const { 
   useGetTasksForCareTeamQuery,
+  useGetTaskByIdForCareTeamQuery,
   useUpdateTaskMutation,
 } = taskSlice

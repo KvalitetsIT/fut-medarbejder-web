@@ -46,7 +46,7 @@ export function Tasks() {
                         <TableRow
                           key={task.id}
                           component={Link}
-                          to={`/episodeofcares/${task.episodeOfCareId}/clinicalimpressions/${task.clinicalImpressionId}`}
+                          to={`/tasks/${task.id}`}
                           sx={{ '&:last-child td, &:last-child th': { border: 0 }, textDecoration: 'none' }}
                         >
                           <TableCell component="th" scope="row">
