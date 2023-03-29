@@ -1,5 +1,5 @@
-import { Box, Divider, List, ListItem, ListItemText, Typography, Button, CircularProgress, ListItemSecondaryAction } from "@mui/material";
-import { useGetCarePlansOnEpisodeOfCareForCareTeamQuery, useUpdateCarePlanMutation } from "../feature/api/careplans";
+import { Box, Divider, List, ListItem, ListItemText, Typography, Stack, ButtonGroup, Button, CircularProgress, ListItemSecondaryAction } from "@mui/material";
+import { useGetCarePlansOnEpisodeOfCareForCareTeamQuery, useUpdateCarePlanOnEpisodeOfCareMutation, useDeleteCarePlanOnEpisodeOfCareMutation } from "../feature/api/careplans";
 import UpdateCarePlan from '../models/UpdateCarePlan';
 import { t } from "i18next";
 
@@ -16,7 +16,11 @@ export function CarePlans(props: CarePlansProps) {
     const [
         updateCarePlan, // This is the mutation trigger
         { isLoading: isUpdating }, // This is the destructured mutation result
-      ] = useUpdateCarePlanMutation();
+      ] = useUpdateCarePlanOnEpisodeOfCareMutation();
+    const [
+        deleteCarePlan, // This is the mutation trigger
+        { isLoading: isDeleting }, // This is the destructured mutation result
+      ] = useDeleteCarePlanOnEpisodeOfCareMutation();
 
     const careplans = data?.slice();
     //episodeOfCares?.sort((a, b) => parseInt(b.uuid) - parseInt(a.uuid));
@@ -46,9 +50,12 @@ export function CarePlans(props: CarePlansProps) {
                                     secondary={careplan.status + " (patientId:" + careplan.patientId + ")"}
                                 />
                                 <ListItemSecondaryAction>
+                                    <Stack direction="row" spacing={1}>
+
+                                    
                                 <Button
                                     variant="contained"
-                                    disabled={isLoading || careplan.status === 'completed'}
+                                    disabled={isLoading || ["completed", "revoked", "entered-in-error"].some(item => item === careplan.status)}
                                     fullWidth={false}
                                     onClick={() => {
                                         const newStatus = (careplan.status !== "active" ? 'active' : 'completed');
@@ -66,6 +73,25 @@ export function CarePlans(props: CarePlansProps) {
                                             {careplan.status === 'draft' ? t("Activate") : t("Complete")}
                                         </>}
                                 </Button>
+
+                                <Button
+                                    variant="contained"
+                                    disabled={isLoading || ["completed", "revoked", "entered-in-error"].some(item => item === careplan.status)}
+                                    fullWidth={false}
+                                    color="error"
+                                    onClick={() => {
+                                        deleteCarePlan({episodeOfCareId: eocId, carePlanId: careplan.id});
+                                    }}
+                                >
+                                    {isLoading ? 
+                                        <CircularProgress color={"inherit"} size={"1.5em"}></CircularProgress> 
+                                        :
+                                        <>
+                                            {t("Delete")}
+                                        </>}
+                                </Button>
+
+                                </Stack>
                                     
                                 </ListItemSecondaryAction>
                             </ListItem>

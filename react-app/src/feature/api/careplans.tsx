@@ -30,7 +30,7 @@ export const carePlanSlice = futApiSlice.injectEndpoints({
       }),
       providesTags: ["careplans"]
     }),
-    updateCarePlan: builder.mutation<number, any>({
+    updateCarePlanOnEpisodeOfCare: builder.mutation<number, any>({
       query: ({episodeOfCareId, carePlanId, updateCarePlan }) => ({
         url: `episodeofcares/${episodeOfCareId}/careplans/${carePlanId}`,
         method: "PATCH",
@@ -38,6 +38,17 @@ export const carePlanSlice = futApiSlice.injectEndpoints({
         responseHandler: (res) => handleResponse({
           response: res, toastWithResult: false,
           toastErrorText: `CarePlan ${carePlanId} could not be updated`
+        }),
+      }),
+      invalidatesTags: ["careplans"]
+    }),
+    deleteCarePlanOnEpisodeOfCare: builder.mutation<number, any>({
+      query: ({episodeOfCareId, carePlanId}) => ({
+        url: `episodeofcares/${episodeOfCareId}/careplans/${carePlanId}`,
+        method: "DELETE",
+        responseHandler: (res) => handleResponse({
+          response: res, toastWithResult: false,
+          toastErrorText: `Careplans ${carePlanId} could not be deleted`
         }),
       }),
       invalidatesTags: ["careplans"]
@@ -50,5 +61,6 @@ export const carePlanSlice = futApiSlice.injectEndpoints({
 export const { 
   usePostCreateCarePlanMutation, 
   useGetCarePlansOnEpisodeOfCareForCareTeamQuery,
-  useUpdateCarePlanMutation
+  useUpdateCarePlanOnEpisodeOfCareMutation,
+  useDeleteCarePlanOnEpisodeOfCareMutation
 } = carePlanSlice
