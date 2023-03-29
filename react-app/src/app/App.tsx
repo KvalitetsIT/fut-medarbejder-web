@@ -11,7 +11,6 @@ import { GetJWTToken, LoginBasedOnToken, UserContext } from "../feature/authenti
 import UserFactory from "../feature/authentication/logic/UserFactory";
 import { AbilityContext } from "../feature/User/logic/Can";
 import { User } from "../models/User";
-import { HomePage } from "../pages/home";
 import { Patients } from "../pages/patients";
 import { CareTeams } from "../pages/careteams";
 import store from "../redux/store";
@@ -49,13 +48,8 @@ function App() {
                     <Layout>
                         <>
                             <Routes>
-                            <Route path="/" element={<HomePage />} />
+                            <Route path="/" element={<Patients />} />
                             <Route path="/patients" element={<Patients />} />
-                            {
-                            //<Route path="/careteams" element={<CareTeams />} />
-                            //<Route path="/careteams/:id" element={<CareTeam />} />
-                            //<Route path="/careteams/:careTeamId/episodeofcare/:id" element={<EpisodeOfCare />} />
-                            }
                             <Route path="/episodeofcares" element={<EpisodeOfCares />} />
                             <Route path="/episodeofcares/:id" element={<EpisodeOfCare />} />
                             <Route path="/tasks" element={<Tasks />} />
