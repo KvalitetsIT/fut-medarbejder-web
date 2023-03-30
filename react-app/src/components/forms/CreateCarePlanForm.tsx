@@ -19,7 +19,8 @@ export interface FormProps<T> {
 interface CreateCarePlanFormProps extends FormProps<CreateCarePlan> {
     createCarePlan?: CreateCarePlan,
     loading?: boolean, 
-    episodeOfCareId: number
+    episodeOfCareId: number,
+    disableButtons: boolean
 }
 
 export function CreateCarePlanForm(props: CreateCarePlanFormProps) {
@@ -73,7 +74,7 @@ export function CreateCarePlanForm(props: CreateCarePlanFormProps) {
                                 <Button
                                     type={"submit"}
                                     variant="contained"
-                                    disabled={props.loading}
+                                    disabled={props.loading || props.disableButtons}
                                     fullWidth={true}
                                 >
                                     {props.loading ? <CircularProgress color={"inherit"} size={"1.5em"}></CircularProgress> : <>{t("Submit")}</>}

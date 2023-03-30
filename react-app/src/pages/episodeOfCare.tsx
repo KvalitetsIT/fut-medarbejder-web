@@ -3,7 +3,7 @@ import { useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Patient } from "../components/Patient";
 import { Consents } from "../components/Consents";
-import { useGetEpisodeOfCareQuery, useUpdateEpisodeOfCareMutation, useGetConsentsForEpisodeOfCareQuery } from "../feature/api/episodeOfCares";
+import { useGetEpisodeOfCareQuery, useUpdateEpisodeOfCareMutation, useGetConsentsForEpisodeOfCareQuery, useDeleteEpisodeOfCareMutation } from "../feature/api/episodeOfCares";
 import { usePostCreateCarePlanMutation } from "../feature/api/careplans";
 import UpdateEpisodeOfCare from "../models/UpdateEpisodeOfCare";
 import { t } from "i18next";
@@ -36,6 +36,10 @@ export function EpisodeOfCare() {
         createCarePlan, // This is the mutation trigger
         { isLoading: carePlanUpdating }, // This is the destructured mutation result
       ] = usePostCreateCarePlanMutation();
+    const [
+        deleteEpisodeOfCare, // This is the mutation trigger
+        { isLoading: isDeleting }, // This is the destructured mutation result
+      ] = useDeleteEpisodeOfCareMutation();
       
     const [mode, setMode] = useState(Mode.NORMAL);
 
@@ -62,22 +66,47 @@ export function EpisodeOfCare() {
                         <p>Id: {episodeOfCare?.uuid}</p>
                         <p>Status: {episodeOfCare?.status}</p>
                     
-            <Stack spacing={2} direction={"row"}>
-                <Button
-                    variant="contained"
-                    disabled={(isLoading || episodeOfCare!.status === 'active') || (consentsLoading || !consents || consents!.length == 0)}
-                    fullWidth={false}
-                    onClick={() => {
-                        let data: UpdateEpisodeOfCare = {
-                            episodeOfCareId: eocId,
-                            status: "active",
-                        };
-                        updateEpisodeOfCare(data);
-                    }}
-                >
-                    {isLoading ? <CircularProgress color={"inherit"} size={"1.5em"}></CircularProgress> : <>{t("Activate Episode Of Care")}</>}
-                </Button>
-            </Stack>   
+                        <Stack spacing={2} direction={"row"}>
+                            <Button
+                                variant="contained"
+                                disabled={(isLoading || ["fhinished", "entered-in-error"].some(item => item === episodeOfCare?.status)) || (consentsLoading || !consents || consents!.length == 0)}
+                                fullWidth={false}
+                                onClick={() => {
+                                    const newStatus = (episodeOfCare?.status !== "active" ? 'active' : 'finished');
+
+                                    let data: UpdateEpisodeOfCare = {
+                                        episodeOfCareId: eocId,
+                                        status: newStatus,
+                                    };
+                                    updateEpisodeOfCare(data);
+                                }}
+                            >
+                                {isLoading ? 
+                                    <CircularProgress color={"inherit"} size={"1.5em"}></CircularProgress> 
+                                    : 
+                                    <>
+                                        {episodeOfCare?.status === 'planned' ? t("Activate") : t("Complete")}
+                                    </>
+                                }
+                            </Button>
+
+                            <Button
+                                    variant="contained"
+                                    disabled={isLoading || ["finished", "entered-in-error"].some(item => item === episodeOfCare?.status)}
+                                    fullWidth={false}
+                                    color="error"
+                                    onClick={() => {
+                                        deleteEpisodeOfCare(eocId);
+                                    }}
+                                >
+                                    {isLoading ? 
+                                        <CircularProgress color={"inherit"} size={"1.5em"}></CircularProgress> 
+                                        :
+                                        <>
+                                            {t("Delete")}
+                                        </>}
+                            </Button>
+                        </Stack>   
                     </>
                 }
                 </Box>
@@ -92,6 +121,7 @@ export function EpisodeOfCare() {
                     <br/>
                     <CreateCarePlanForm 
                         episodeOfCareId={eocId}
+                        disableButtons={episodeOfCare?.status !== 'active'}
                         onSubmit={async (submission: CreateCarePlan) => {
                             console.log("hello")
                                 

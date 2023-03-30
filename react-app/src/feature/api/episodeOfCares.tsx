@@ -81,6 +81,17 @@ export const episodeOfCareSlice = futApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["episode-of-care"]
     }),
+    deleteEpisodeOfCare: builder.mutation<number, any>({
+      query: (episodeOfCareId) => ({
+        url: `episodeofcares/${episodeOfCareId}`,
+        method: "DELETE",
+        responseHandler: (res) => handleResponse({
+          response: res, toastWithResult: false,
+          toastErrorText: `Episode Of Care ${episodeOfCareId} could not be deleted`
+        }),
+      }),
+      invalidatesTags: ["episode-of-care", "careplans"]
+    }),
   })
 })
 
@@ -92,5 +103,6 @@ export const {
   useUpdateEpisodeOfCareMutation,
   useGetConsentsForEpisodeOfCareQuery,
   usePostCreateEpisodeOfCareMutation,
-  usePostCreateConsentForEpisodeOfCareMutation
+  usePostCreateConsentForEpisodeOfCareMutation,
+  useDeleteEpisodeOfCareMutation
 } = episodeOfCareSlice;

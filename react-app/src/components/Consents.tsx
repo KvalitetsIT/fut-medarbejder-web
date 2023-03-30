@@ -30,7 +30,8 @@ export function Consents(props: ConsentProps) {
             {
                 (consent) ? 
                 <>
-                    <p>Type: </p>
+                    <p>id: {consent?.id}</p>
+                    <p>Type: {consent?.type}</p>
                     <p>Status: {consent?.status}</p>
                     <p>Start: {consent?.start.toString()}</p>
                 </> 
