@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
-import { Divider, Typography, List, ListItem, ListItemText } from "@mui/material"
+import { Divider, Typography, List, ListItem, ListItemText, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
 import { useState, useContext } from "react";
 import { useGetEpisodeOfCaresQuery, usePostCreateEpisodeOfCareMutation } from "../feature/api/episodeOfCares";
 import { UserContext } from "../feature/authentication/logic/FetchUser";
 import { CreateEpisodeOfCareForm } from "../components/forms/CreateEpisodeOfCareForm";
 import CreateEpisodeOfCare from "../models/CreateEpisodeOfCare";
 import { useGetPatientsQuery } from "../feature/api/patients";
+import { t } from "i18next";
 
 enum Mode {
     NORMAL = "normal",
@@ -55,25 +56,35 @@ export function EpisodeOfCares() {
             <Divider />
             {
                 isLoading ? <p>Loading...</p> : 
-                <List>
-                    {   
-                        episodeOfCares && episodeOfCares.map((episodeOfCare) =>
-                            <ListItem component={Link} to={`/episodeofcares/${episodeOfCare.uuid}`} sx={{
-                                padding: 1,
-                                border: 2,
-                                borderColor: "#EEEEEE",
-                                textAlign: "left",
-                                display: "list-item",
-                                backgroundColor: "#d5e6f7"
-                            }}>
-                                <ListItemText
-                                    primary={episodeOfCare.uuid}
-                                    secondary={episodeOfCare.status + " (patientId:" + episodeOfCare.patientId + ")"}
-                                />
-                            
-                            </ListItem>)
-                    }
-                </List>
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>id</TableCell>
+                        <TableCell>{t<string>("Status")}</TableCell>
+                        <TableCell>{t<string>("Patient")}</TableCell>
+                        <TableCell>{t<string>("Start")}</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {episodeOfCares && episodeOfCares.map((episodeOfCare) => (
+                        <TableRow
+                          key={episodeOfCare.uuid}
+                          component={Link}
+                          to={`/episodeofcares/${episodeOfCare.uuid}`}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 }, textDecoration: 'none' }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {episodeOfCare.uuid}
+                          </TableCell>
+                          <TableCell>{episodeOfCare.status}</TableCell>
+                          <TableCell>{episodeOfCare.patientId}</TableCell>
+                          <TableCell>{episodeOfCare.start.toString()}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>  
             }
         </>
     )
