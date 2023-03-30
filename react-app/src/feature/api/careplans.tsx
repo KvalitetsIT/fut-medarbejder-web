@@ -20,9 +20,10 @@ export const carePlanSlice = futApiSlice.injectEndpoints({
       invalidatesTags: ["careplans"]
     }),
     getCarePlansOnEpisodeOfCareForCareTeam: builder.query<CarePlan[], any>({
-      query: ({careTeamId, episodeOfCareId}) => ({
+      query: ({careTeamId, episodeOfCareId, carePlanStatus}) => ({
         url: `careteams/${careTeamId}/episodeofcares/${episodeOfCareId}/careplans`,
         method: "GET",
+        params: { status: carePlanStatus },
         responseHandler: (res) => handleResponse({
           response: res, toastWithResult: false,
           toastErrorText: `Careplans for Episodes of Care ${episodeOfCareId} could not be fetched`

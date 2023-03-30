@@ -1,4 +1,5 @@
-import { Divider, Typography, Stack, Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { useState } from "react";
+import { Divider, Typography, Stack, Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, FormControlLabel, FormGroup, Switch } from "@mui/material";
 import { useGetCarePlansOnEpisodeOfCareForCareTeamQuery, useUpdateCarePlanOnEpisodeOfCareMutation, useDeleteCarePlanOnEpisodeOfCareMutation } from "../feature/api/careplans";
 import UpdateCarePlan from '../models/UpdateCarePlan';
 import { t } from "i18next";
@@ -12,7 +13,9 @@ export function CarePlans(props: CarePlansProps) {
     const teamId = props.careTeamId;
     const eocId = props.episodeOfCareId
 
-    const { data, isLoading } = useGetCarePlansOnEpisodeOfCareForCareTeamQuery({careTeamId: teamId, episodeOfCareId: eocId});
+    const [carePlanStatus, setCarePlanStatus] = useState('draft,active');
+    
+    const { data, isLoading } = useGetCarePlansOnEpisodeOfCareForCareTeamQuery({careTeamId: teamId, episodeOfCareId: eocId, carePlanStatus: carePlanStatus});
     const [
         updateCarePlan, // This is the mutation trigger
         { isLoading: isUpdating }, // This is the destructured mutation result
@@ -25,11 +28,23 @@ export function CarePlans(props: CarePlansProps) {
     const careplans = data?.slice();
     careplans?.sort((a, b) => new Date(b.start).getTime() - new Date(a.start).getTime());
 
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.checked) {
+            setCarePlanStatus('completed');
+        }
+        else {
+            setCarePlanStatus("draft,active");
+        }
+    };
+
     return (
         <>
             <Divider />
             <br/>
             <Typography variant="h5">Careplans</Typography>
+            <FormGroup>
+                <FormControlLabel control={<Switch onChange={handleChange} />} label={t<string>("completed")} />
+            </FormGroup>
             {
                 isLoading ? <p>Loading...</p> 
                 : 
@@ -58,46 +73,51 @@ export function CarePlans(props: CarePlansProps) {
                                 <TableCell>{(careplan.end) ? new Date(careplan.end).toLocaleString(): ''}</TableCell>
                                 <TableCell>
                                     <Stack direction="row" justifyContent="end" spacing={1}>
-                                        <Button
-                                            variant="contained"
-                                            disabled={isLoading || ["completed", "revoked", "entered-in-error"].some(item => item === careplan.status)}
-                                            fullWidth={false}
-                                            onClick={() => {
-                                                const newStatus = (careplan.status !== "active" ? 'active' : 'completed');
-                                                const end = (newStatus === "completed" ? new Date() : undefined);
+                                        {(carePlanStatus === 'completed') ? <></>
+                                        :
+                                        <>
+                                            <Button
+                                                variant="contained"
+                                                disabled={isLoading || ["completed", "revoked", "entered-in-error"].some(item => item === careplan.status)}
+                                                fullWidth={false}
+                                                onClick={() => {
+                                                    const newStatus = (careplan.status !== "active" ? 'active' : 'completed');
+                                                    const end = (newStatus === "completed" ? new Date() : undefined);
+                                                
+                                                    let data : UpdateCarePlan = {
+                                                        status: newStatus,
+                                                        end: end
+                                                    };
+                                                    updateCarePlan({episodeOfCareId: eocId, carePlanId: careplan.id, updateCarePlan: data});
+                                                }}
+                                            >
+                                            {isLoading ? 
+                                                <CircularProgress color={"inherit"} size={"1.5em"}></CircularProgress> 
+                                                :
+                                                <>
+                                                    {careplan.status === 'draft' ? t("Activate") : t("Complete")}
+                                                </>}
+                                            </Button>
                                             
-                                                let data : UpdateCarePlan = {
-                                                    status: newStatus,
-                                                    end: end
-                                                };
-                                                updateCarePlan({episodeOfCareId: eocId, carePlanId: careplan.id, updateCarePlan: data});
-                                            }}
-                                        >
-                                        {isLoading ? 
-                                            <CircularProgress color={"inherit"} size={"1.5em"}></CircularProgress> 
-                                            :
-                                            <>
-                                                {careplan.status === 'draft' ? t("Activate") : t("Complete")}
-                                            </>}
-                                        </Button>
-                                        
-                                        <Button
-                                            variant="contained"
-                                            disabled={isLoading || ["completed", "revoked", "entered-in-error"].some(item => item === careplan.status)}
-                                            fullWidth={false}
-                                            color="error"
-                                            onClick={() => {
-                                                deleteCarePlan({episodeOfCareId: eocId, carePlanId: careplan.id});
-                                            }}
-                                        >
-                                        {isLoading ? 
-                                            <CircularProgress color={"inherit"} size={"1.5em"}></CircularProgress> 
-                                            :
-                                            <>
-                                                {t("Delete")}
-                                            </>
-                                        }
-                                        </Button>                                
+                                            <Button
+                                                variant="contained"
+                                                disabled={isLoading || ["completed", "revoked", "entered-in-error"].some(item => item === careplan.status)}
+                                                fullWidth={false}
+                                                color="error"
+                                                onClick={() => {
+                                                    deleteCarePlan({episodeOfCareId: eocId, carePlanId: careplan.id});
+                                                }}
+                                            >
+                                            {isLoading ? 
+                                                <CircularProgress color={"inherit"} size={"1.5em"}></CircularProgress> 
+                                                :
+                                                <>
+                                                    {t("Delete")}
+                                                </>
+                                            }
+                                            </Button>   
+                                        </>
+                                        }                             
                                     </Stack>
                                 </TableCell>
                             </TableRow>

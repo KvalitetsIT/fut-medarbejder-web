@@ -25,6 +25,7 @@ export function Tasks() {
             <Typography variant="h4">Tasks</Typography>
             <FormGroup>
                 <FormControlLabel control={<Switch onChange={handleChange} />} label={t<string>("completed")} />
+                
             </FormGroup>            
 
             <Divider />
