@@ -12,10 +12,11 @@ import handleResponse from '../../redux/handleResponse';
 export const episodeOfCareSlice = futApiSlice.injectEndpoints({
   endpoints: (builder) => ({
   
-    getEpisodeOfCares: builder.query<EpisodeOfCare[], number>({
-      query: (careTeamId) => ({
+    getEpisodeOfCares: builder.query<EpisodeOfCare[], any>({
+      query: ({careTeamId, episodeOfCareStatus}) => ({
         url: `episodeofcares?careTeamId=${careTeamId}`,
         method: "GET",
+        params: { status: episodeOfCareStatus },
         responseHandler: (res) => handleResponse({
           response: res, toastWithResult: false,
           toastErrorText: "Episodes of Cares could not be fetched"

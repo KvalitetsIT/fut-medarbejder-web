@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Divider, Typography, List, ListItem, ListItemText, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import { Divider, Typography, List, ListItem, ListItemText, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, FormControlLabel, FormGroup, Switch } from "@mui/material"
 import { useState, useContext } from "react";
 import { useGetEpisodeOfCaresQuery, usePostCreateEpisodeOfCareMutation } from "../feature/api/episodeOfCares";
 import { UserContext } from "../feature/authentication/logic/FetchUser";
@@ -18,7 +18,10 @@ enum Mode {
 export function EpisodeOfCares() {
     const user = useContext(UserContext);
     const teamId = parseInt(user!.careTeamId!);
-    const { data: episodeOfCares, isLoading } = useGetEpisodeOfCaresQuery(teamId);
+
+    const [episodeOfCareStatus, setEpisodeOfCareStatus] = useState('planned,active');
+
+    const { data, isLoading } = useGetEpisodeOfCaresQuery({careTeamId: teamId, episodeOfCareStatus: episodeOfCareStatus});
     const { data: patients, isLoading: fetchingPatients } = useGetPatientsQuery(undefined);
     const [
         createEOC, // This is the mutation trigger
@@ -26,6 +29,18 @@ export function EpisodeOfCares() {
       ] = usePostCreateEpisodeOfCareMutation();
      
     const [mode, setMode] = useState(Mode.NORMAL);
+
+    const episodeOfCares = data?.slice();
+    //episodeOfCares?.sort((a, b) => new Date(b.start).getTime() - new Date(a.start).getTime());
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.checked) {
+            setEpisodeOfCareStatus('finished');
+        }
+        else {
+            setEpisodeOfCareStatus("planned,active");
+        }
+    };
 
     return (
         <>
@@ -54,8 +69,12 @@ export function EpisodeOfCares() {
                     <br />
 
             <Divider />
+            <FormGroup>
+                <FormControlLabel control={<Switch onChange={handleChange} />} label={t<string>("completed")} />
+            </FormGroup>
             {
                 isLoading ? <p>Loading...</p> : 
+                
                 <TableContainer component={Paper}>
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
